@@ -1,6 +1,6 @@
 {
 	"name": "deepfreezer",
-	"version": "1.0.1",
+	"version": "1.0.2",
 	"author": {
 		"name": "TOGoS",
 		"url": "http://www.nuke24.net/"
@@ -16,7 +16,7 @@
 	"license": "MIT",
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/TOGoS/FreezerJS.git"
+		"url": "https://github.com/TOGoS/DeepFreezerJS.git"
 	},
 	"main": "Freezer.js",
 	"scripts": {
