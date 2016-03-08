@@ -1,6 +1,6 @@
 [![Build Status](https://travis-ci.org/TOGoS/DeepFreezerJS.svg?branch=master)](https://travis-ci.org/TOGoS/DeepFreezerJS)
 
-# FreezerJS
+# DeepFreezerJS
 
 A library for [deep] freezing and [deep] thawing JavaScript objects.
 
