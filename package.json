@@ -1,19 +1,26 @@
 {
-   "name": "freezer",
-   "author": {
-      "name": "TOGoS",
-      "url": "http://www.nuke24.net/"
-   },
-   "version": "1.0.0",
-   "description": "Recursively (and efficiently) freeze and thaw objects.",
-   "main": "Freezer.js",
-   "scripts": {
-      "test": "node test.js"
-   },
-   "keywords": {
-      "freeze",
-      "thaw",
-      "deepfreeze",
-      "deep freeze"
-   }
+	"name": "freezer",
+	"version": "1.0.0",
+	"author": {
+		"name": "TOGoS",
+		"url": "http://www.nuke24.net/"
+	},
+	"description": "Recursively (and efficiently) freeze and thaw objects.",
+	"keywords": [
+		"freeze",
+		"freezer",
+		"thaw",
+		"deepfreeze",
+		"deep freeze"
+	],
+	"license": "MIT",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/TOGoS/FreezerJS.git"
+	},
+	"main": "Freezer.js",
+	"scripts": {
+		"test": "node test.js"
+	},
+	"dependencies": {}
 }
