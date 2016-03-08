@@ -10,7 +10,6 @@ var freezer;
 if( typeof module !== 'undefined' ) {
 	// Node!
 	freezer = require('./Freezer.js');
-	var process = require('process');
 	
 	fail = function(message) {
 		process.stderr.write(message+"\n");
