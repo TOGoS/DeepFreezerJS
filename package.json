@@ -1,0 +1,19 @@
+{
+   "name": "freezer",
+   "author": {
+      "name": "TOGoS",
+      "url": "http://www.nuke24.net/"
+   },
+   "version": "1.0.0",
+   "description": "Recursively (and efficiently) freeze and thaw objects.",
+   "main": "Freezer.js",
+   "scripts": {
+      "test": "node test.js"
+   },
+   "keywords": {
+      "freeze",
+      "thaw",
+      "deepfreeze",
+      "deep freeze"
+   }
+}

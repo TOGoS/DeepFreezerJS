@@ -9,7 +9,7 @@ var freezer;
 
 if( typeof module !== 'undefined' ) {
 	// Node!
-	freezer = require('./index.js');
+	freezer = require('./Freezer.js');
 	var process = require('process');
 	
 	fail = function(message) {
