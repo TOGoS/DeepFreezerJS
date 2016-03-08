@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8"/>
+<title>Freezer Test</title>
+<style>
+.success { color: darkgreen; }
+.failure { color: darkred; }
+</style>
+</head>
+<body>
+
+<p class="notes" id="notes">...</p>
+
+<script type="text/javascript">
+	var failureMessage = null;
+	function failForTheBrowser(message) {
+		failureMessage = message;
+	}	
+</script>
+
+<script type="text/javascript" src="freezer.js"></script>
+<script type="text/javascript" src="test.js"></script>
+
+<script type="text/javascript">
+(function() {
+	"use strict";
+	var notesElem = document.getElementById('notes');
+	if( typeof testsRan === 'undefined' || !testsRan ) {
+		notesElem.innerHTML = "Tests didn't even run!";
+		notesElem.className += " failure";
+	} else if( failureMessage === null ) {
+		notesElem.innerHTML = "Success!";
+		notesElem.className += " success";
+	} else {
+		notesElem.innerHTML = "Failure!";
+		notesElem.className += " failure";
+	}
+})();
+</script>
+
+</body>
+</html>

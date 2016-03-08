@@ -1,3 +1,5 @@
+var testsRan = false;
+
 (function() {
 "use strict";
 
@@ -14,13 +16,18 @@ if( typeof module !== 'undefined' ) {
 		process.stderr.write(message+"\n");
 		process.exit(1);
 	};
+} else if( typeof failForTheBrowser !== 'undefined' ) {
+	freezer = Freezer;
+	fail = failForTheBrowser;
 } else {
+	freezer = Freezer;
+	// Oh, or we could've just done this.
 	fail = function(message) {
-		failForTheBrowser(message)
+		throw new Exception(message);
 	};
 }
 
-var assert = function(value, message) {
+assert = function(value, message) {
 	if( !value ) {
 		fail("Assertion failed: "+message);
 	}
@@ -64,5 +71,7 @@ thawedPizza.topping = {name: 'Bacon'};
 
 // And the whole point of the library:
 assert( thawedPizza.topping.name != pizza.topping.name, "Toppings should have differed between frozen/thawed and never-frozen pizzas" );
+
+testsRan = true;
 
 })();
