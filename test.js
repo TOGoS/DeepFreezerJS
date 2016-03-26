@@ -32,6 +32,13 @@ assert = function(value, message) {
 	}
 };
 
+var enumerableProps = function(obj) {
+	var i;
+	var props = [];
+	for( i in obj ) props.push(i);
+	return props;
+};
+
 // Need:
 // - Recursive freeze
 // - Thaw
@@ -90,6 +97,10 @@ assert( frozenArray.length === 3, "Array length should still be a thing on froze
 
 var thawedArray = freezer.thaw(frozenArray);
 
+assert( JSON.stringify(enumerableProps(thawedArray)) == JSON.stringify(enumerableProps(anArray)),
+		  "Thawed array should have the same enumerable properties as the original array; "+
+		  "original props:" + JSON.stringify(enumerableProps(anArray))+"; "+
+		  "thawed props:" + JSON.stringify(enumerableProps(thawedArray)));
 assert( !Object.is(thawedArray, anArray), "Thawed array must be a different object from the original array" );
 assert( !Object.isFrozen(thawedArray), "Thawed array must not be frozen" );
 assert( !freezer.isDeepFrozen(thawedArray), "Thawed array must not be deep frozen" );

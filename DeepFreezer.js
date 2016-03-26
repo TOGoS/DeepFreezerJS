@@ -12,9 +12,9 @@ var DeepFreezer = (function() {
 	};
 	
 	var map = function(obj, mapFunc) {
-		//var clone = {}; // Fails array copy test!
-		//var clone = new (Object.getPrototypeOf(obj).constructor)(); // Works but is more complex than...
-		var clone = Object.create(Object.getPrototypeOf(obj));
+		//var clone = {}; // Loses too much information!
+		//var clone = Object.create(Object.getPrototypeOf(obj)); // Fails to construct arrays right, so length becomes enumerable
+		var clone = new (Object.getPrototypeOf(obj).constructor)();
 		_map(obj, clone, mapFunc);
 		return clone;
 	};
