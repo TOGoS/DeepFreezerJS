@@ -9,17 +9,17 @@ var freezer;
 
 if( typeof module !== 'undefined' ) {
 	// Node!
-	freezer = require('./Freezer.js');
+	freezer = require('./DeepFreezer.js');
 	
 	fail = function(message) {
 		process.stderr.write(message+"\n");
 		process.exit(1);
 	};
 } else if( typeof failForTheBrowser !== 'undefined' ) {
-	freezer = Freezer;
+	freezer = DeepFreezer;
 	fail = failForTheBrowser;
 } else {
-	freezer = Freezer;
+	freezer = DeepFreezer;
 	// Oh, or we could've just done this.
 	fail = function(message) {
 		throw new Exception(message);
@@ -70,6 +70,24 @@ thawedPizza.topping = {name: 'Bacon'};
 
 // And the whole point of the library:
 assert( thawedPizza.topping.name != pizza.topping.name, "Toppings should have differed between frozen/thawed and never-frozen pizzas" );
+
+var anArray = [1,2,3];
+
+assert( anArray.length === 3 );
+
+var frozenArray = freezer.deepFreeze(anArray);
+
+assert( freezer.isDeepFrozen(frozenArray) );
+assert( frozenArray.length === 3, "Array length should still be a thing on frozen arrays" );
+
+var thawedArray = freezer.thaw(frozenArray);
+
+assert( !Object.is(thawedArray, anArray), "Thawed array must be a different object from the original array" );
+assert( !Object.isFrozen(thawedArray), "Thawed array must not be frozen" );
+assert( !freezer.isDeepFrozen(thawedArray), "Thawed array must not be deep frozen" );
+assert( thawedArray.length === 3, "Array length should still be a thing on thawed arrays" );
+assert( Object.is(Object.getPrototypeOf(thawedArray), Object.getPrototypeOf(anArray)),
+		  "Thawed array should have the same prototype as the original array" );
 
 testsRan = true;
 

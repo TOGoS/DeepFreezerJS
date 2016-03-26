@@ -1,4 +1,4 @@
-var Freezer = (function() {
+var DeepFreezer = (function() {
 	"use strict";
 	
 	var deepFrozen = Symbol("deeply frozen");
@@ -41,15 +41,22 @@ var Freezer = (function() {
 		return obj;
 	};
 	
+	var identity = function(x) { return x; };
+	
+	var map = function(obj, mapFunc) {
+		//var clone = {}; // Fails array copy test!
+		var clone = Object.create(Object.getPrototypeOf(obj));
+		//var clone = new (Object.getPrototypeOf(obj).constructor)();
+		Object.getOwnPropertyNames(obj).forEach(function(k) {
+			clone[k] = mapFunc(obj[k]);
+		});
+		return clone;
+	};
+	
 	var thaw = function(obj) {
 		if( !Object.isFrozen(obj) ) return obj;
-		
-		var clone = Object.create(Object.getPrototypeOf(obj));
-		Object.getOwnPropertyNames(obj).forEach(function(k) {
-			clone[k] = obj[k];
-		});
-		
-		return clone;
+		if( typeof obj !== 'object' && typeof obj !== 'function' ) return obj;
+		return map(obj, identity);
 	};
 	
 	var deepThaw = function(obj) {
@@ -60,13 +67,19 @@ var Freezer = (function() {
 		return obj;
 	};
 	
+	var myOwnCopyOf = function(obj) {
+		return deepThaw(deepFreeze(obj));
+	};
+	
 	return {
+		map: map, // It may be handy to others, so why not
 		freeze: freeze,
 		deepFreeze: deepFreeze,
 		isDeepFrozen: isDeepFrozen,
 		thaw: thaw,
-		deepThaw: deepThaw
+		deepThaw: deepThaw,
+		myOwnCopyOf: myOwnCopyOf
 	};
 })();
 
-if( typeof module !== 'undefined' ) module.exports = Freezer;
+if( typeof module !== 'undefined' ) module.exports = DeepFreezer;
