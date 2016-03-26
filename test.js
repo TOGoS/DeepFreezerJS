@@ -46,6 +46,14 @@ assert( !freezer.isDeepFrozen(pizza), "Pizza should not seem deep frozen before 
 
 var frozenPizza = freezer.deepFreeze(pizza);
 
+assert( !Object.is(pizza, frozenPizza), "Frozen pizza should have been a new instance");
+assert( !Object.isFrozen(pizza), "Original pizza should not be frozen" );
+assert( !Object.is(pizza.topping, frozenPizza.topping), "Frozen pizza topping should have been a new instance");
+assert( !Object.isFrozen(pizza.topping), "Original pizza topping should not be frozen" );
+
+// Okay, now back to our usual 'allow freezing in-place' tests:
+frozenPizza = freezer.deepFreeze(pizza, true);
+
 assert( Object.is(pizza, frozenPizza), "Pizza should not have needed to be cloned to be frozen" );
 assert( Object.isFrozen(frozenPizza), "Frozen pizza should be frozen" );
 assert( freezer.isDeepFrozen(frozenPizza), "Frozen pizza should be deep frozen" );

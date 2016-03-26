@@ -19,6 +19,10 @@ var DeepFreezer = (function() {
 		return clone;
 	};
 	
+	var clone = function(obj) {
+		return map(obj, identity);
+	};
+	
 	////
 
 	var deepFrozen = Symbol("deeply frozen");
@@ -34,24 +38,36 @@ var DeepFreezer = (function() {
 	 * Why would you use this instead of deepFreeze?
 	 * Probably shouldn't.
 	 */
-	var freeze = function(obj) {
+	var freeze = function(obj, inPlace) {
+		if( Object.isFrozen(obj) ) return obj;
+		
 		var hasAnyMutableProperties = false;
 		Object.getOwnPropertyNames(obj).forEach(function(k) {
 			if( !isDeepFrozen(obj[k]) ) {
 				hasAnyMutableProperties = true;
 			}
 		});
-		if( !hasAnyMutableProperties ) obj[deepFrozen] = true;
-		return Object.freeze(obj);
+		var frozenObj = inPlace ? obj : clone(obj);
+		if( !hasAnyMutableProperties ) frozenObj[deepFrozen] = true;
+		return Object.freeze(frozenObj);
 	};
 	
-	var deepFreeze = function(obj) {
+	/**
+	 * Return either the object or a clone of it that is deep frozen.
+	 * To ensure that your exiting object remains mutable (assuming it is),
+	 * pass true to the (slightly misnamed) newInstance parameter.
+	 * 
+	 * @param {object} obj the object to freeze
+	 * @param {boolean} inPlace true if you want to allow the object to be frozen in-place;
+	 *   otherwise, the original object is left as-is and any freezing would be done on a new object
+	 */
+	var deepFreeze = function(obj, inPlace) {
 		if( isDeepFrozen(obj) ) return obj;
 		
 		// If it ain't /deep frozen/ we're going to have
 		// to thaw it at least to add the deepFrozen property.
-		obj = thaw(obj);
-		_map( obj, obj, deepFreeze );
+		obj = thaw(inPlace ? obj : clone(obj), inPlace);
+		_map( obj, obj, deepFreeze, inPlace );
 		obj[deepFrozen] = true;
 		Object.freeze(obj);
 		return obj;
@@ -77,6 +93,7 @@ var DeepFreezer = (function() {
 		// Stuff I'm making public because it's handy for my other
 		// libraries, especially when dealing with deep frozen stuff
 		map: map,
+		clone: clone,
 		
 		// Our API
 		freeze: freeze,
