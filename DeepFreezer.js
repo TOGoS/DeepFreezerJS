@@ -1,6 +1,26 @@
 var DeepFreezer = (function() {
 	"use strict";
 	
+	//// Object cloning utilities
+	
+	var identity = function(x) { return x; };
+	
+	var _map = function(from, to, mapFunc) {
+		Object.getOwnPropertyNames(from).forEach(function(k) {
+			to[k] = mapFunc(from[k]);
+		});
+	};
+	
+	var map = function(obj, mapFunc) {
+		//var clone = {}; // Fails array copy test!
+		//var clone = new (Object.getPrototypeOf(obj).constructor)(); // Works but is more complex than...
+		var clone = Object.create(Object.getPrototypeOf(obj));
+		_map(obj, clone, mapFunc);
+		return clone;
+	};
+	
+	////
+
 	var deepFrozen = Symbol("deeply frozen");
 	
 	var isDeepFrozen = function(val) {
@@ -31,26 +51,10 @@ var DeepFreezer = (function() {
 		// If it ain't /deep frozen/ we're going to have
 		// to thaw it at least to add the deepFrozen property.
 		obj = thaw(obj);
-		
-		Object.getOwnPropertyNames(obj).forEach(function(k) {
-			obj[k] = deepFreeze(obj[k]);
-		});
-		
+		_map( obj, obj, deepFreeze );
 		obj[deepFrozen] = true;
 		Object.freeze(obj);
 		return obj;
-	};
-	
-	var identity = function(x) { return x; };
-	
-	var map = function(obj, mapFunc) {
-		//var clone = {}; // Fails array copy test!
-		var clone = Object.create(Object.getPrototypeOf(obj));
-		//var clone = new (Object.getPrototypeOf(obj).constructor)();
-		Object.getOwnPropertyNames(obj).forEach(function(k) {
-			clone[k] = mapFunc(obj[k]);
-		});
-		return clone;
 	};
 	
 	var thaw = function(obj) {
@@ -61,9 +65,7 @@ var DeepFreezer = (function() {
 	
 	var deepThaw = function(obj) {
 		obj = thaw(obj);
-		Object.getOwnPropertyNames(obj).forEach(function(k) {
-			obj[k] = thaw(obj[k]);
-		});
+		_map(obj, obj, thaw);
 		return obj;
 	};
 	
@@ -72,7 +74,11 @@ var DeepFreezer = (function() {
 	};
 	
 	return {
-		map: map, // It may be handy to others, so why not
+		// Stuff I'm making public because it's handy for my other
+		// libraries, especially when dealing with deep frozen stuff
+		map: map,
+		
+		// Our API
 		freeze: freeze,
 		deepFreeze: deepFreeze,
 		isDeepFrozen: isDeepFrozen,
