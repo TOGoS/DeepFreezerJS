@@ -59,7 +59,11 @@ var DeepFreezer = (function() {
 	 * 
 	 * @param {object} obj the object to freeze
 	 * @param {boolean} inPlace true if you want to allow the object to be frozen in-place;
-	 *   otherwise, the original object is left as-is and any freezing would be done on a new object
+	 *   otherwise, the original object is left as-is and any freezing would be done on a new object.
+	 *   Note that even when true, this does not guarantee that the object will be deep-frozen in-place;
+	 *   If the object is frozen but not deep-frozen, for example, a new instance will be returned.
+	 *   Also note that passing false does not guarantee a new instance;
+	 *   If the object is already deep-frozen, that same object will be returned.
 	 */
 	var deepFreeze = function(obj, inPlace) {
 		if( isDeepFrozen(obj) ) return obj;
