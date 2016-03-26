@@ -24,13 +24,12 @@ var pizza = {
 
 pizza.toppings.push({"name": "Mushrooms"});
 
-// #freeze always returns the same object passed in,
-var frozenPizza = DeepFreezer.deepFreeze(pizza);
+// The second parameter, 'true', means 'allow freezing in-place'.
+// i.e. we don't care about keeping the original object mutable.
+var frozenPizza = DeepFreezer.deepFreeze(pizza, true);
 
 frozenPizza.toppings.push({"name": "Olives"}); // an error!  Pizza's frozen
 pizza.toppings.push({"name": "Olives"}); // Also an error!  That's the same instance as frozenPizza.
-// We could have passed 'true' as a second parameter to 'freeze' to indicate
-// 'disallow freezing in place'
 
 var thawedPizza = DeepFreezer.thaw(pizza);
 
