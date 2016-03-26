@@ -6,6 +6,12 @@ A library for [deep] freezing and [deep] thawing JavaScript objects.
 
 Can be used from node or the browser.
 
+This package is intended for freezing and thawing simple objects and arrays.
+In order to clone arrays properly is invokes objects' prototypes constructor
+in order to make copies, so it probably won't work with objects with
+complex custom constructors or properties that aren't carefully designed
+to work with it.
+
 ## Examples
 
 Freeze your pizza
